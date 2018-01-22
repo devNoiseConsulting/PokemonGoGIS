@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# egrep "\tGym" ./data/megaDump.csv > ./data/knownGyms.csv
+# egrep "\tGym" ./data/megaDump.csv | cut -f1 > ./data/knownGyms.txt
+#
+# node markKnown.js ./data/megaDump.csv ./data/RaidsSeen.txt
+
 # cut -f1-3 ./data/megaDump.csv > ./data/clusters.csv
 # node poiCluster.js ./data/clusters.csv
 

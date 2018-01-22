@@ -22,7 +22,7 @@ function formatFile(fileName) {
     poi = text.split('\n').map(point => point.split('\t'));
 
     text = fs.readFileSync(gymsFile, 'utf8');
-    gyms = text.split('\n');
+    gyms = text.split('\n').filter(point => point);
   } catch (e) {
     console.log('ERROR 1: file: ' + fileName + ' error: ' + e.message);
 
@@ -37,7 +37,7 @@ function formatFile(fileName) {
       }
     }
     return point;
-  });
+  }).filter(point => point[0] !== '' || point[0] !== undefined);
 
   try {
     let out = fs.createWriteStream(fileName, {
