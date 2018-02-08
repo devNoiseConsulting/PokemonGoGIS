@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const afar = require('afar');
 
+const zoneRadius = 2.5;
 const pathName = process.argv[2];
 
 if (pathName) {
@@ -33,7 +34,7 @@ function formatFile(fileName) {
   poi = poi.map((point, i, arr) => {
     point[3] = arr
       .map(v => afar(v[1], v[2], point[1], point[2]))
-      .filter(v => v <= 0.5).length;
+      .filter(v => v <= zoneRadius).length;
     return point;
   })
   .sort(compareNumbers)
@@ -43,7 +44,7 @@ function formatFile(fileName) {
   poi = poi.reduce((acc, point, i) => {
     let addPoint = true;
     acc.forEach(p => {
-      if (afar(p[1], p[2], point[1], point[2]) <= 1) {
+      if (afar(p[1], p[2], point[1], point[2]) <= zoneRadius) {
         addPoint = false;
       }
     });
