@@ -31,15 +31,21 @@ function processFile(fileName) {
 
   const level = 12;
   const s2Cells = poi
-    .filter(point => point[3])
+    .filter(point => point[2])
     // .map((point, i, arr) => S2.latLngToKey(point[1], point[2], level))
     .filter((cell, i, arr) => i == arr.indexOf(cell))
     .reduce((acc, point) => {
       const cell = S2.latLngToKey(point[1], point[2], level);
       acc.push(cell);
-      // acc.push(S2.nextKey(cell));
-      // acc.push(S2.prevKey(cell));
       const neighbors = S2.latLngToNeighborKeys(point[1], point[2], level);
+
+      return acc.concat(neighbors);
+    }, [])
+    .filter((cell, i, arr) => i == arr.indexOf(cell))
+    .reduce((acc, cell) => {
+      const neighbors = S2.S2Cell.FromHilbertQuadKey(cell)
+        .getNeighbors()
+        .map(cell => cell.toHilbertQuadkey());
 
       return acc.concat(neighbors);
     }, [])
@@ -56,7 +62,7 @@ function processFile(fileName) {
       return [cell, ...corners];
     });
 
-  const newFileName = './data/s2Cells.csv';
+  const newFileName = fileName.replace('.csv', '.s2Cells.csv');
 
   try {
     let out = fs.createWriteStream(newFileName, {
